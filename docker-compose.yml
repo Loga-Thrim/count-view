@@ -1,0 +1,23 @@
+version : "3"
+services : 
+    redis:
+        container_name : cache
+        image: redis
+        expose:
+            - 6379
+    count-view:
+        container_name : count-view
+        build: ./
+        volumes:
+        - ./:/usr/src/app
+        ports:
+        - 91:91
+        environment:
+        - NODE_ENV=development
+        - PORT=91
+        - REDIS_URL=redis://redis:6379
+        links :
+        - redis:redis
+        command:
+            sh -c 'npm i && nodemon --legacy-watch app.js'
+    
