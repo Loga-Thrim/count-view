@@ -6,7 +6,7 @@ module.exports = {
   ...client,
   getAsync: promisify(client.lrange).bind(client),
   setAsync: promisify(client.rpush).bind(client),
-  hSetAsync: promisify(client.hset).bind(client),
+  hSetAsync: promisify(client.setex).bind(client),
   hGetAsync: promisify(client.hget).bind(client),
   delAsync: promisify(client.ltrim).bind(client),
   keysAsync: promisify(client.keys).bind(client)

@@ -8,8 +8,8 @@
 </head>
 <body>
     <script>
-        setInterval(()=>{
-            fetch("http://localhost:91/set", {
+        function getViewer(){
+            fetch("http://localhost:91/setviewer", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -20,8 +20,8 @@
                 })
             }).then(res=>res.json())
             .then(result=>console.log(result))
-
-            fetch("http://localhost:91/get", {
+            
+            fetch("http://localhost:91/getviewer", {
                 method: "POST",
                 headers: {
                     "Accept": "application/json",
@@ -35,6 +35,10 @@
             .then(result=>{
                 console.log(result)
             })
+        }
+        getViewer();
+        setInterval(()=>{
+            getViewer();
         }, 5000)
     </script>
 </body>
