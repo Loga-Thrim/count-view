@@ -3,6 +3,7 @@ const app = express();
 const redisClient = require('./redis-client');
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const mongoClient = require("mongodb").MongoClient;
 
 app
     .use(cors())
@@ -14,7 +15,6 @@ app
         await redisClient.setAsync(state, nTime.getTime());
         res.json({status: "Added viewer"});
     })
-
     .post("/getviewer", async (req, res)=>{
         const { state, timeState } = req.body;
         const getData = await redisClient.getAsync(state, 0, -1);
@@ -25,7 +25,6 @@ app
         if(getData.length == 0) count = 0
         res.json({count})
     })
-
     .post("/delviewer", async (req, res)=>{
         const { state, timeState } = req.body;
         const getData = await redisClient.getAsync(state, 0, -1);
@@ -39,4 +38,16 @@ app
             if(i == getData.length-1) res.json({status: "Deleted viewer"});
         }
     })
-    .listen(91, ()=>console.log(`> App running`));
+
+    .get("/test", (req, res)=>{
+        mongoClient.connect("mongodb://mongodb:27017", { useNewUrlParser: true, useUnifiedTopology: true }, (err, db)=>{
+            if(err) throw err;
+            const dbcon = db.db("test");
+            dbcon.collection("mycol").find({}).toArray((err, result)=>{
+                if(err) throw err;
+                console.log(result)
+                res.json({msg: "hi"});
+            })
+        })
+    })
+    .listen(5000, ()=>console.log(`> App running`));

@@ -6,18 +6,16 @@ services :
         expose:
             - 6379
     count-view:
+        image: 'docker-node-mongo'
         container_name : count-view
         build: ./
         volumes:
         - ./:/usr/src/app
         ports:
-        - 91:91
+        - '5000:5000'
         environment:
-        - NODE_ENV=development
-        - PORT=91
         - REDIS_URL=redis://redis:6379
         links :
         - redis:redis
         command:
             sh -c 'npm i && nodemon --legacy-watch app.js'
-    
